@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Animated darker pastel background */
+body {
+  min-height: 100vh;
+  background: linear-gradient(270deg,
+    #C9A3E8,  /* light lavender */
+    #5A3D77,  /* dark plum */
+    #7DA7D9,  /* light sky blue */
+    #2F5D8A,  /* dark steel blue */
+    #6FC1A1,  /* light mint */
+    #2E6B55,  /* dark forest green */
+    #e7576c,  /* light dusty pink */
+    #922B3E   /* dark wine red */
+  );
+  background-size: 1200% 1200%;
+  animation: gradientShift 50s ease infinite;
+  font-family: 'Inter', sans-serif;
+}
+
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
