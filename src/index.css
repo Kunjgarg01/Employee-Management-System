@@ -7,16 +7,16 @@ body {
   min-height: 100vh;
   background: linear-gradient(270deg,
     #C9A3E8,  /* light lavender */
-    #5A3D77,  /* dark plum */
+    #774e9f,  /* dark plum */
     #7DA7D9,  /* light sky blue */
-    #2F5D8A,  /* dark steel blue */
-    #6FC1A1,  /* light mint */
-    #2E6B55,  /* dark forest green */
-    #e7576c,  /* light dusty pink */
+    #417bb5,  /* dark steel blue */
+    #8fe3c3,  /* light mint */
+    #397e64,  /* dark forest green */
+    #df6e7f,  /* light dusty pink */
     #922B3E   /* dark wine red */
   );
   background-size: 1200% 1200%;
-  animation: gradientShift 50s ease infinite;
+  animation: gradientShift 60s ease infinite;
   font-family: 'Inter', sans-serif;
 }
 

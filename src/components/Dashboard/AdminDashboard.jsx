@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import React, { useState } from "react";
-
+import Header from "../Others/Header.jsx";
+import CreateTask from "../Others/CreateTask.jsx";
 const AdminPanel = () => {
   const [task, setTask] = useState({
     title: "",
@@ -28,6 +29,8 @@ const AdminPanel = () => {
   };
 
   return (
+    <>
+    <Header />
     <div className="max-w-8xl mx-auto mt-1 p-6 bg-white/10 backdrop-blur-md rounded-2xl shadow-lg">
       {/* 2 Column Layout */}
       <form
@@ -126,6 +129,8 @@ const AdminPanel = () => {
         </div>
       </form>
     </div>
+    <CreateTask />
+    </>
   );
 };
 

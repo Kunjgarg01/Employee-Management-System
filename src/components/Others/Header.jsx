@@ -16,8 +16,8 @@ const Header = () => {
           transition={{ duration: 0.6 }}
           className="text-3xl font-extrabold leading-tight flex flex-col gap-1 text-white"
         >
-          <span>Hello</span>
-          <span className="text-yellow-300 flex items-center gap-2">
+          <h2 className="font-bold">Hello</h2>
+          <span className="text-yellow-300 flex items-center gap-2 font-semibold italic">
             Kunj
             <motion.span
               animate={{ rotate: [0, 20, -10, 20, 0] }}

@@ -3,11 +3,11 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, LogIn } from "lucide-react";
 
-export default function Login() {
+export default function Login({ handleLogin }) {
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  // Example employee emails
   const employeeEmails = [
     "employee1@example.com",
     "employee2@example.com",
@@ -17,20 +17,18 @@ export default function Login() {
     "admin@example.com",
   ];
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Login Data:", formData);
-    setFormData({ email: "", password: "" });
+    console.log("Login Data:", email, password);
+    handleLogin(email, password);
+    setEmail("");
+    setPassword("");
   };
 
   return (
     <div
       className="flex items-center justify-center min-h-screen p-4
-      bg-gradient-to-r from-[#C9A3E8] via-[#7DA7D9] via-[#6FC1A1] to-[#e7576c]
+      bg-gradient-to-r from-[#cdafe6] via-[#5191df] via-[#62d0a6]  via-[#ae4b5a] to-[#f5da90]
       animate-[gradientShift_40s_ease_infinite] bg-[length:1000%_1000%]"
     >
       <motion.div
@@ -44,7 +42,7 @@ export default function Login() {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Email Dropdown */}
+          {/* Email Input with Datalist */}
           <div>
             <label
               htmlFor="email"
@@ -52,25 +50,23 @@ export default function Login() {
             >
               E-mail
             </label>
-            <select
+            <input
+              list="emailSuggestions"
               name="email"
               id="email"
-              value={formData.email}
-              onChange={handleChange}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
+              placeholder="Enter or select your e-mail"
               className="w-full px-4 py-2 bg-white/10 text-white rounded-xl border border-white/20
               focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400
-              transition-all duration-300"
-            >
-              <option value="" disabled className="text-gray-500">
-                Enter your e-mail
-              </option>
+              placeholder-gray-300 transition-all duration-300"
+            />
+            <datalist id="emailSuggestions">
               {employeeEmails.map((email, idx) => (
-                <option key={idx} value={email} className="text-black">
-                  {email}
-                </option>
+                <option key={idx} value={email} />
               ))}
-            </select>
+            </datalist>
           </div>
 
           {/* Password */}
@@ -87,8 +83,8 @@ export default function Login() {
                 name="password"
                 id="password"
                 placeholder=".....123"
-                value={formData.password}
-                onChange={handleChange}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
                 className="w-full px-4 py-2 bg-white/10 text-white rounded-xl border border-white/20
                 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400
@@ -103,7 +99,6 @@ export default function Login() {
               </button>
             </div>
           </div>
-
           {/* Submit Button */}
           <motion.button
             whileHover={{ scale: 1.05 }}
