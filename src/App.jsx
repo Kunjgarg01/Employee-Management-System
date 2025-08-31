@@ -1,47 +1,94 @@
-import React, { useEffect, useState } from 'react'
-import Login from './components/Auth/Login.jsx'
-import Header from './components/Others/Header.jsx'
-import TaskListNumber from './components/Others/TaskListNumber.jsx'
-import TaskDets from './components/TaskList/TaskDets.jsx'
-import AdminDashboard from './components/Dashboard/AdminDashboard.jsx'
-// import CreateTask from './components/Others/createTask.jsx'
-import { setLocalStorage } from './utils/LocalStorage.jsx'
-import EmployeeDashboard from './components/Dashboard/EmployeeDashboard.jsx'
+import React, { useContext, useEffect, useState } from 'react';
+import Login from './components/Auth/Login.jsx';
+import Header from './components/Others/Header.jsx';
+import AdminDashboard from './components/Dashboard/AdminDashboard.jsx';
+import EmployeeDashboard from './components/Dashboard/EmployeeDashboard.jsx';
+import { setLocalStorage } from './utils/LocalStorage.jsx';
+import { AuthContext } from './context/AuthProvider.jsx';
 
 const App = () => {
+  const [user, setUser] = useState(null); // 'admin' | 'employee' | null
+  const [LoggedInUserData, setLoggedInUserData] = useState(null);
+  const authData = useContext(AuthContext);
 
   useEffect(() => {
     setLocalStorage();
-  }, []);
 
-  const [user, setUser] = useState("");
+    const savedUser = JSON.parse(localStorage.getItem("currentUser"));
+    const userData = JSON.parse(localStorage.getItem("userData"));
 
-  const handleLogin = (email,password) => {
-    if(email === "admin@example.com" && password === "123"){
-      setUser("admin"); // fix: use lowercase to match conditional rendering
-      console.log("Admin Logged In");
+    if (savedUser) {
+      const isAdmin = savedUser.email === "admin@example.com";
+      setUser(isAdmin ? "admin" : "employee");
+
+      if (!isAdmin) {
+        // Refresh employee data from latest localStorage (after task assignment)
+        const updatedEmp = userData?.employees?.find(emp => emp.email === savedUser.email);
+        setLoggedInUserData(updatedEmp || savedUser);
+      } else {
+        setLoggedInUserData(savedUser);
+      }
     }
-    else if(email === "employee1@example.com" && password === "123"){
-      setUser("employee"); // fix: use lowercase to match conditional rendering
-      console.log("employee Logged In");
+  }, [authData]);
+
+  // ✅ Handle login (employee or admin)
+  const handleLogin = (email, password) => {
+    if (authData) {
+      // Admin login
+      const adminUser = authData.admin.find(
+        (a) => a.email === email && a.password === password
+      );
+      if (adminUser) {
+        setUser("admin");
+        setLoggedInUserData(adminUser);
+        localStorage.setItem("currentUser", JSON.stringify(adminUser));
+        console.log("Admin Logged In");
+        return;
+      }
+
+      // Employee login
+      const employee = authData.employees.find(
+        (e) => e.email === email && e.password === password
+      );
+      if (employee) {
+        setUser("employee");
+        setLoggedInUserData(employee);
+        localStorage.setItem("currentUser", JSON.stringify(employee));
+        console.log("Employee Logged In");
+        return;
+      }
     }
-    else{
-      alert("Invalid Credentials");
-    }
-  }
+
+    alert("Invalid Credentials");
+  };
+
+  // ✅ Handle logout
+
+  
+  const handleLogout = () => {
+    setUser(null);
+    setLoggedInUserData(null);
+    localStorage.removeItem("currentUser");
+    console.log("User Logged Out");
+  };
 
   return (
     <>
-      {!user ? <Login handleLogin={handleLogin} /> : ''}
-      {user === 'admin' ? <AdminDashboard /> : user === 'employee' ? <EmployeeDashboard /> : ''}
-      {/* <Header /> */}
-      {/* <TaskListNumber /> */}
-      {/* <TaskDets /> */}
-      {/* <AdminDashboard /> */}
-      {/* <CreateTask /> */}
-      {/* <EmployeeDashboard /> */}
+      {!user ? (
+        <Login handleLogin={handleLogin} />
+      ) : user === 'admin' ? (
+        <>
+          {/* <Header handleLogout={handleLogout} /> */}
+          <AdminDashboard data={LoggedInUserData} handleLogout={handleLogout} />
+        </>
+      ) : user === 'employee' ? (
+        <>
+          {/* <Header handleLogout={handleLogout} /> */}
+          <EmployeeDashboard data={LoggedInUserData} handleLogout={handleLogout} />
+        </>
+      ) : null}
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;

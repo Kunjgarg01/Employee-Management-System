@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { LogOut } from "lucide-react";
 
-const Header = () => {
+const Header = ({ handleLogout }) => {
+  const [firstName, setFirstName] = useState("");
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("currentUser"));
+    if (user && user.firstName) {
+      setFirstName(user.firstName);
+    }
+  }, []);
+
   return (
     <header className="bg-transparent">
       <div
@@ -17,8 +26,8 @@ const Header = () => {
           className="text-3xl font-extrabold leading-tight flex flex-col gap-1 text-white"
         >
           <h2 className="font-bold">Hello</h2>
-          <span className="text-yellow-300 flex items-center gap-2 font-semibold italic">
-            Kunj
+          <h1 className="text-yellow-300 flex items-center gap-2 font-semibold italic">
+            {firstName}
             <motion.span
               animate={{ rotate: [0, 20, -10, 20, 0] }}
               transition={{ repeat: Infinity, duration: 1.5 }}
@@ -26,10 +35,10 @@ const Header = () => {
             >
               👋
             </motion.span>
-          </span>
+          </h1>
         </motion.div>
 
-        {/* Very Dark Logout Button */}
+        {/* Logout Button */}
         <motion.button
           type="button"
           whileHover={{ scale: 1.05 }}
@@ -37,6 +46,7 @@ const Header = () => {
           initial={{ x: 50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.6 }}
+          onClick={handleLogout}
           className="flex items-center gap-2 px-5 py-2
                      bg-red-400 text-white rounded-xl shadow-lg
                      hover:bg-red-700 active:bg-gray-700

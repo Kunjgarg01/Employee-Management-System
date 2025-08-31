@@ -1,4 +1,3 @@
-// src/components/Login.jsx
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, LogIn } from "lucide-react";
@@ -20,7 +19,7 @@ export default function Login({ handleLogin }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Login Data:", email, password);
-    handleLogin(email, password);
+    handleLogin(email, password);  // Removed name from here
     setEmail("");
     setPassword("");
   };
@@ -42,6 +41,7 @@ export default function Login({ handleLogin }) {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
+
           {/* Email Input with Datalist */}
           <div>
             <label
@@ -99,6 +99,7 @@ export default function Login({ handleLogin }) {
               </button>
             </div>
           </div>
+
           {/* Submit Button */}
           <motion.button
             whileHover={{ scale: 1.05 }}
